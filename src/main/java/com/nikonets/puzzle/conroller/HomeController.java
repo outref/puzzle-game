@@ -3,6 +3,7 @@ package com.nikonets.puzzle.conroller;
 import com.nikonets.puzzle.dto.ImageInfoDto;
 import com.nikonets.puzzle.service.ImageService;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,11 @@ public class HomeController {
 
     @GetMapping("/home")
     public String displayHomePage(Model model) {
-        List<ImageInfoDto> imageInfosList = imageService.getImageInfosList();
+        List<ImageInfoDto> imageInfosList = imageService.getImagesList().stream()
+                .map(s -> new ImageInfoDto(s,
+                "/game?imageName=" + s,
+                "/download?imageName=" + s))
+                .collect(Collectors.toList());
         model.addAttribute("imageInfosList", imageInfosList);
         return "home";
     }

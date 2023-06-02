@@ -2,8 +2,8 @@ package com.nikonets.puzzle.service.impl;
 
 import com.nikonets.puzzle.model.GameBoard;
 import com.nikonets.puzzle.model.GameTile;
+import com.nikonets.puzzle.repository.ImageRepository;
 import com.nikonets.puzzle.service.PuzzleGameService;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,37 +11,36 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class PuzzleGameServiceImpl implements PuzzleGameService {
-    @Value("${images.dir}")
-    private String imagesDir;
+    private final ImageRepository repository;
 
     @Override
     public GameBoard createInitTable(String imageName) {
-        File tilesDir = new File(imagesDir + imageName);
-        int tilesCount = tilesDir.list().length - 1;
+        List<String> tileImgsList = repository.getAllTilesByImageName(imageName);
+        String refImg = repository.getReferenceByImageName(imageName);
 
         //positions randomizer
-        List<Integer> initPositions = IntStream.range(0, tilesCount)
+        List<Integer> initPositions = IntStream.range(0, tileImgsList.size())
                 .boxed()
                 .collect(Collectors.toList());
         Collections.shuffle(initPositions);
 
         //Creating tiles list
         List<GameTile> tilesList = new ArrayList<>();
-        for (int i = 0; i < tilesCount; i++) {
+        for (int i = 0; i < tileImgsList.size(); i++) {
             int randomIndex = new Random().nextInt(GameTile.ROTATION_DEGREES.size());
             int rotationDegrees = GameTile.ROTATION_DEGREES.get(randomIndex);
-            tilesList.add(new GameTile(i, initPositions.get(i), rotationDegrees,
-                    "/" + imagesDir + imageName + "/" + i + ".jpg"));
+            tilesList.add(new GameTile(i, initPositions.get(i),
+                    rotationDegrees, tileImgsList.get(i)));
         }
 
         List<List<GameTile>> tilesTable = sortAndCreateTable(tilesList);
-        String refImageUrl = "/" + imagesDir + imageName + "/reference.jpg";
-        return new GameBoard(refImageUrl, tilesList, tilesTable);
+        return new GameBoard(refImg, tilesList, tilesTable);
     }
 
     @Override

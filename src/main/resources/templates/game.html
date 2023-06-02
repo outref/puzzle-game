@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello</title>
-    <link rel="stylesheet" th:href="@{/styles/styles.css}">
+    <link rel="stylesheet" th:href="@{/styles/navbar.css}">
+    <link rel="stylesheet" th:href="@{/styles/game.css}">
 </head>
 <body>
 <div th:insert="navbar :: navbar"></div>
@@ -31,9 +32,9 @@
     <tr th:each="tileRow: ${tilesTable}">
         <th:block th:each="gameTile: ${tileRow}">
             <td>
-                <span class="gameTile">
+                <span class="tile">
                     <img th:style="${gameTile.rotationStyle}" th:src="${gameTile.url}"/>
-                    <span class="gameTile-number" th:text="${gameTile.currentPos}"></span>
+                    <span class="tile-number" th:text="${gameTile.currentPos}"></span>
                 </span>
             </td>
         </th:block>

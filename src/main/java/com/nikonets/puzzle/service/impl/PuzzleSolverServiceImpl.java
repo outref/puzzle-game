@@ -1,9 +1,9 @@
 package com.nikonets.puzzle.service.impl;
 
 import com.nikonets.puzzle.model.SolverTile;
+import com.nikonets.puzzle.repository.ImageRepository;
 import com.nikonets.puzzle.service.PuzzleSolverService;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -11,12 +11,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@RequiredArgsConstructor
 @Service
 public class PuzzleSolverServiceImpl implements PuzzleSolverService {
     private static final double PIXEL_MAX_VALUE = 16777216;
+    private final ImageRepository repository;
 
     @Override
     public String solvePuzzle(MultipartFile[] files) throws IOException {
@@ -67,10 +70,7 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                 }
             }
         }
-
-        File outputFile = new File("images/solution.jpg");
-        ImageIO.write(solutionImage, "jpg", outputFile);
-        return "images/solution.jpg";
+        return repository.saveSolution(solutionImage);
     }
 
     private SolverTile[][] cropTableToImageSize(SolverTile[][] table) {

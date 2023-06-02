@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Upload</title>
-    <link rel="stylesheet" th:href="@{/styles/styles.css}">
+    <link rel="stylesheet" th:href="@{/styles/navbar.css}">
+    <link rel="stylesheet" th:href="@{/styles/upload.css}">
 </head>
 <body>
-<div th:insert="navbar :: navbar"></div>
-<br>
+<div th:insert="navbar :: navbar"></div><br>
 <div>
-    <h2>Upload Your Image</h2>
+    <h2>Upload your image:</h2>
     <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
-        <input type="file" name="image" accept="image/*">
-        <input type="text" name="imageName" placeholder="Image name">
+        <input type="file" name="image" accept="image/*"><br>
+        <input type="text" name="imageName" placeholder="Image name"><br>
         <button type="submit">Upload jpg image</button>
     </form>
     <span th:text="${msg}"></span>
