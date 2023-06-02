@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}">
+</head>
+<body>
+<div th:insert="navbar :: navbar"></div>
+<br>
+<form method="post" action="/game/swap">
+    <input type="text" name="tile1Pos" placeholder="Tile1 №">
+    <input type="text" name="tile2Pos" placeholder="Tile2 №">
+    <input type="submit" value="Swap">
+</form>
+<br>
+<form method="post" action="/game/rotate">
+    <input type="text" name="tilePos" placeholder="Tile №">
+    <input type="submit" value="Rotate">
+</form>
+<br>
+<form method="post" action="/game/check">
+    <input type="submit" value="Check solution">
+</form>
+<p th:text="${msgTop}"></p>
+<br>
+<table>
+    <thead>
+    </thead>
+    <tbody>
+    <tr th:each="tileRow: ${tilesTable}">
+        <th:block th:each="gameTile: ${tileRow}">
+            <td>
+                <span class="gameTile">
+                    <img th:style="${gameTile.rotationStyle}" th:src="${gameTile.url}"/>
+                    <span class="gameTile-number" th:text="${gameTile.currentPos}"></span>
+                </span>
+            </td>
+        </th:block>
+    </tr>
+    </tbody>
+</table>
+<br>
+<p th:text="${msgBottom}"></p>
+<img th:src="${referenceImg}"/>
+</body>
+</html>

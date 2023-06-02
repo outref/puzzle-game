@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload</title>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}">
+</head>
+<body>
+<div th:insert="navbar :: navbar"></div>
+<br>
+<div>
+    <h2>Upload Your Image</h2>
+    <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*">
+        <input type="text" name="imageName" placeholder="Image name">
+        <button type="submit">Upload jpg image</button>
+    </form>
+    <span th:text="${msg}"></span>
+    <br>
+    <img th:if="${img ne null}" height="100px" width="100px" th:src="${img}"/>
+</div>
+</body>
+</html>
