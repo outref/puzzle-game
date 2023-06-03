@@ -8,9 +8,11 @@ public interface ImageRepository {
 
     List<String> getAllImages();
 
-    List<String> getAllTilesByImageName(String imageName);
+    List<String> getTilesUrlsByImageName(String imageName);
 
     String getReferenceByImageName(String imageName);
 
     String saveSolution(BufferedImage solution);
+
+    List<String> getAllFilesByImageName(String imageName);
 }

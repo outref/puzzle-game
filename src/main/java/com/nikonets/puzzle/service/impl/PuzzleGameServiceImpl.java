@@ -21,7 +21,7 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
 
     @Override
     public GameBoard createInitTable(String imageName) {
-        List<String> tileImgsList = repository.getAllTilesByImageName(imageName);
+        List<String> tileImgsList = repository.getTilesUrlsByImageName(imageName);
         String refImg = repository.getReferenceByImageName(imageName);
 
         //positions randomizer

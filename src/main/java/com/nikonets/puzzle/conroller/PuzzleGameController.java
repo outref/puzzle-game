@@ -8,14 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/game")
 public class PuzzleGameController {
     private final PuzzleGameService gameService;
 
-    @GetMapping("/game")
+    @GetMapping
     public String loadGame(Model model,
                            HttpSession session,
                            @RequestParam String imageName) {
@@ -25,7 +27,7 @@ public class PuzzleGameController {
         return "game";
     }
 
-    @PostMapping("/game/swap")
+    @PostMapping("/swap")
     public String swapPuzzles(Model model,
                               HttpSession session,
                               @RequestParam Integer tile1Pos,
@@ -36,7 +38,7 @@ public class PuzzleGameController {
         return "game";
     }
 
-    @PostMapping("/game/rotate")
+    @PostMapping("/rotate")
     public String rotateRight(Model model,
                           HttpSession session,
                           @RequestParam Integer tilePos) {
@@ -46,7 +48,7 @@ public class PuzzleGameController {
         return "game";
     }
 
-    @PostMapping("/game/check")
+    @PostMapping("/check")
     public String checkSolution(Model model,
                                 HttpSession session) {
         GameBoard gameBoard = (GameBoard) session.getAttribute("game-board");
@@ -55,7 +57,7 @@ public class PuzzleGameController {
         if (correctSolution) {
             message = "Correct!";
         } else {
-            message = "Incorrect!";
+            message = "Incorrect! See reference image below -->";
         }
         model.addAttribute("msgTop", message);
         model.addAttribute("msgBottom", "Correct image reference:");

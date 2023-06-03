@@ -2,18 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Puzzle Game</title>
     <link rel="stylesheet" th:href="@{/styles/navbar.css}">
     <link rel="stylesheet" th:href="@{/styles/home.css}">
 </head>
 <body>
-<div th:insert="navbar :: navbar"></div>
+<div th:insert="~{navbar :: navbar}"></div>
 <br>
+
 <h2>Images:</h2>
 <table>
     <thead>
-        <td> Play! </td>
-        <td> Download puzzles zip </td>
+    <td> Play!</td>
+    <td> Download puzzles zip</td>
     </thead>
     <tbody>
     <tr th:each="imageInfo: ${imageInfosList}">
@@ -26,5 +27,6 @@
     </tr>
     </tbody>
 </table>
+
 </body>
 </html>

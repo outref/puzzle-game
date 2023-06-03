@@ -8,13 +8,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/")
 public class HomeController {
     private final ImageService imageService;
 
-    @GetMapping("/home")
+    @GetMapping
     public String displayHomePage(Model model) {
         List<ImageInfoDto> imageInfosList = imageService.getImagesList().stream()
                 .map(s -> new ImageInfoDto(s,

@@ -17,13 +17,14 @@ public class UploadServiceImpl implements UploadService {
     private final ImageRepository imageRepository;
 
     @Override
-    public String uploadImage(String imageName, MultipartFile file) throws IOException {
+    public String uploadImage(String imageName, Integer sideLength,
+                              MultipartFile file) throws IOException {
         InputStream is = file.getInputStream();
         BufferedImage inputImg = ImageIO.read(is);
 
         // initializing rows and columns
-        int rows = 4;
-        int columns = 4;
+        int rows = sideLength;
+        int columns = sideLength;
 
         // initializing array to hold sub-images
         BufferedImage[] tileImages = new BufferedImage[rows * columns];

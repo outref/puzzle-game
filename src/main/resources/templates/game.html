@@ -7,24 +7,27 @@
     <link rel="stylesheet" th:href="@{/styles/game.css}">
 </head>
 <body>
-<div th:insert="navbar :: navbar"></div>
+<div th:insert="~{navbar :: navbar}"></div>
 <br>
+
 <form method="post" action="/game/swap">
-    <input type="text" name="tile1Pos" placeholder="Tile1 №">
-    <input type="text" name="tile2Pos" placeholder="Tile2 №">
+    <input required type="text" name="tile1Pos" placeholder="Tile1 №">
+    <input required type="text" name="tile2Pos" placeholder="Tile2 №">
     <input type="submit" value="Swap">
 </form>
 <br>
+
 <form method="post" action="/game/rotate">
-    <input type="text" name="tilePos" placeholder="Tile №">
+    <input required type="text" name="tilePos" placeholder="Tile №">
     <input type="submit" value="Rotate">
 </form>
 <br>
+
 <form method="post" action="/game/check">
     <input type="submit" value="Check solution">
 </form>
-<p th:text="${msgTop}"></p>
-<br>
+
+<p th:text="${msgTop}"></p><br>
 <table>
     <thead>
     </thead>
@@ -42,7 +45,8 @@
     </tbody>
 </table>
 <br>
+
 <p th:text="${msgBottom}"></p>
-<img th:src="${referenceImg}"/>
+<img th:if="${referenceImg ne null}" width="500px" height="500px" th:src="${referenceImg}"/>
 </body>
 </html>

@@ -7,19 +7,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public class ImageRepositoryImpl implements ImageRepository {
     private static final String REFERENCE_IMG_NAME = "reference.jpg";
     private static final String IMG_FORMAT = "jpg";
-    private static final String IMAGES_DIR = "images/";
-    private static final String SOLUTIONS_DIR = "images/solutions/";
+    @Value("${images.storage.dir}")
+    private String imagesDir;
+    @Value("${solutions.storage.dir}")
+    private String solutionsDir;
 
     @Override
     public String saveTiles(String imageName, BufferedImage refImg, BufferedImage[] tileImages) {
-        String dirPath = IMAGES_DIR + imageName;
+        String dirPath = imagesDir + imageName;
         File tilesDir = new File(dirPath);
         tilesDir.mkdirs();
 
@@ -40,34 +44,34 @@ public class ImageRepositoryImpl implements ImageRepository {
                 throw new RuntimeException("Failed to write tile image file to repository!", e);
             }
         }
-        return dirPath + "/" + REFERENCE_IMG_NAME;
+        return "/" + dirPath + "/" + REFERENCE_IMG_NAME;
     }
 
     @Override
     public List<String> getAllImages() {
-        File dir = new File(IMAGES_DIR);
+        File dir = new File(imagesDir);
         return Arrays.asList(dir.list());
     }
 
     @Override
-    public List<String> getAllTilesByImageName(String imageName) {
-        File dir = new File(IMAGES_DIR + imageName);
+    public List<String> getTilesUrlsByImageName(String imageName) {
+        File dir = new File(imagesDir + imageName);
         List<String> tilesList = new ArrayList<>();
         for (int i = 0; i < dir.list().length - 1; i++) {
-            tilesList.add(IMAGES_DIR + imageName + "/" + i + "." + IMG_FORMAT);
+            tilesList.add("/" + imagesDir + imageName + "/" + i + "." + IMG_FORMAT);
         }
         return tilesList;
     }
 
     @Override
     public String getReferenceByImageName(String imageName) {
-        return IMAGES_DIR + imageName + "/" + REFERENCE_IMG_NAME;
+        return "/" + imagesDir + imageName + "/" + REFERENCE_IMG_NAME;
     }
 
     @Override
     public String saveSolution(BufferedImage solution) {
-        int id = new File(SOLUTIONS_DIR).list().length + 1;
-        String path = SOLUTIONS_DIR + id + "." + IMG_FORMAT;
+        int id = new File(solutionsDir).list().length + 1;
+        String path = solutionsDir + id + "." + IMG_FORMAT;
         File outputFile = new File(path);
         try {
             ImageIO.write(solution, IMG_FORMAT, outputFile);
@@ -75,5 +79,14 @@ public class ImageRepositoryImpl implements ImageRepository {
             throw new RuntimeException("Failed to save solution image", e);
         }
         return path;
+    }
+
+    @Override
+    public List<String> getAllFilesByImageName(String imageName) {
+        File dir = new File(imagesDir + imageName);
+        return Arrays.stream(dir.listFiles())
+                .filter(File::isFile)
+                .map(File::getPath)
+                .collect(Collectors.toList());
     }
 }

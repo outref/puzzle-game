@@ -21,10 +21,9 @@ public class DownloadServiceImpl implements DownloadService {
     public void streamZipToResponse(HttpServletResponse response, String imageName) {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment; filename=download.zip");
-        List<String> tilesList = imageRepository.getAllTilesByImageName(imageName);
-        tilesList.add(imageRepository.getReferenceByImageName(imageName));
+        List<String> filesList = imageRepository.getAllFilesByImageName(imageName);
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
-            for (String fileName : tilesList) {
+            for (String fileName : filesList) {
                 FileSystemResource fileSystemResource = new FileSystemResource(fileName);
                 ZipEntry zipEntry = new ZipEntry(fileSystemResource.getFilename());
                 zipEntry.setSize(fileSystemResource.contentLength());

@@ -7,16 +7,20 @@
     <link rel="stylesheet" th:href="@{/styles/puzzle-solver.css}">
 </head>
 <body>
-<div th:insert="navbar :: navbar"></div>
+<div th:insert="~{navbar :: navbar}"></div>
+<br>
+
 <div>
     <h2>Upload your puzzle tiles:</h2>
     <form method="post" th:action="@{/solver}" enctype="multipart/form-data">
-        <input type="file" multiple name="files"><br>
-        <input type="text" name="imageName" placeholder="Image name"><br>
-        <button type="submit">Upload jpg images</button>
+        <input required type="file" multiple name="files"><br>
+        <button type="submit">Solve!</button>
     </form>
-    <span th:text="${msg}"></span><br>
-    <img th:src="${solutionUrl}"/>
 </div>
+<br>
+
+<span th:text="${msg}"></span><br>
+<img th:src="${solutionUrl}"/>
+
 </body>
 </html>
