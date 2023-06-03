@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class ImageRepositoryImpl implements ImageRepository {
-    private static final String REFERENCE_IMG_NAME = "reference.jpg";
+    private static final String ORIGINAL_IMG_NAME = "original.jpg";
     private static final String IMG_FORMAT = "jpg";
     @Value("${images.storage.dir}")
     private String imagesDir;
@@ -22,17 +22,19 @@ public class ImageRepositoryImpl implements ImageRepository {
     private String solutionsDir;
 
     @Override
-    public String saveTiles(String imageName, BufferedImage refImg, BufferedImage[] tileImages) {
+    public String saveTiles(String imageName,
+                            BufferedImage originalImg,
+                            BufferedImage[] tileImages) {
         String dirPath = imagesDir + imageName;
         File tilesDir = new File(dirPath);
         tilesDir.mkdirs();
 
         //writing original(reference) image
-        File refImgFile = new File(dirPath + "/" + REFERENCE_IMG_NAME);
+        File originalImgFile = new File(dirPath + "/" + ORIGINAL_IMG_NAME);
         try {
-            ImageIO.write(refImg, IMG_FORMAT, refImgFile);
+            ImageIO.write(originalImg, IMG_FORMAT, originalImgFile);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write reference image file to repository!", e);
+            throw new RuntimeException("Failed to write original image file to repository!", e);
         }
 
         //writing sub-images into image files
@@ -44,7 +46,7 @@ public class ImageRepositoryImpl implements ImageRepository {
                 throw new RuntimeException("Failed to write tile image file to repository!", e);
             }
         }
-        return "/" + dirPath + "/" + REFERENCE_IMG_NAME;
+        return "/" + dirPath + "/" + ORIGINAL_IMG_NAME;
     }
 
     @Override
@@ -64,8 +66,8 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public String getReferenceByImageName(String imageName) {
-        return "/" + imagesDir + imageName + "/" + REFERENCE_IMG_NAME;
+    public String getOriginalImageByName(String imageName) {
+        return "/" + imagesDir + imageName + "/" + ORIGINAL_IMG_NAME;
     }
 
     @Override

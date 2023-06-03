@@ -27,7 +27,7 @@
     <input type="submit" value="Check solution">
 </form>
 
-<p th:text="${msgTop}"></p><br>
+<p th:text="${message}"></p><br>
 <table>
     <thead>
     </thead>
@@ -36,7 +36,7 @@
         <th:block th:each="gameTile: ${tileRow}">
             <td>
                 <span class="tile">
-                    <img th:style="${gameTile.rotationStyle}" th:src="${gameTile.url}"/>
+                    <img th:style="'transform:rotate(' + ${gameTile.rotation} + 'deg);'" th:src="${gameTile.imageUrl}"/>
                     <span class="tile-number" th:text="${gameTile.currentPos}"></span>
                 </span>
             </td>
@@ -46,7 +46,7 @@
 </table>
 <br>
 
-<p th:text="${msgBottom}"></p>
-<img th:if="${referenceImg ne null}" width="500px" height="500px" th:src="${referenceImg}"/>
+<p th:if="${originalImg ne null}">Correct image: </p>
+<img th:if="${originalImg ne null}" width="500px" height="500px" th:src="${originalImg}"/>
 </body>
 </html>

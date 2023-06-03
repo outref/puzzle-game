@@ -21,26 +21,26 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
 
     @Override
     public GameBoard createInitTable(String imageName) {
-        List<String> tileImgsList = repository.getTilesUrlsByImageName(imageName);
-        String refImg = repository.getReferenceByImageName(imageName);
+        List<String> tileImagesList = repository.getTilesUrlsByImageName(imageName);
+        String originalImg = repository.getOriginalImageByName(imageName);
 
         //positions randomizer
-        List<Integer> initPositions = IntStream.range(0, tileImgsList.size())
+        List<Integer> initPositions = IntStream.range(0, tileImagesList.size())
                 .boxed()
                 .collect(Collectors.toList());
         Collections.shuffle(initPositions);
 
         //Creating tiles list
         List<GameTile> tilesList = new ArrayList<>();
-        for (int i = 0; i < tileImgsList.size(); i++) {
+        for (int i = 0; i < tileImagesList.size(); i++) {
             int randomIndex = new Random().nextInt(GameTile.ROTATION_DEGREES.size());
             int rotationDegrees = GameTile.ROTATION_DEGREES.get(randomIndex);
             tilesList.add(new GameTile(i, initPositions.get(i),
-                    rotationDegrees, tileImgsList.get(i)));
+                    rotationDegrees, tileImagesList.get(i)));
         }
 
-        List<List<GameTile>> tilesTable = sortAndCreateTable(tilesList);
-        return new GameBoard(refImg, tilesList, tilesTable);
+        List<List<GameTile>> tilesTable = sortAndCreateSquareTable(tilesList);
+        return new GameBoard(originalImg, tilesList, tilesTable);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
                 .get();
         gameTile1.setCurrentPos(tile2Pos);
         gameTile2.setCurrentPos(tile1Pos);
-        List<List<GameTile>> tilesTable = sortAndCreateTable(tilesList);
+        List<List<GameTile>> tilesTable = sortAndCreateSquareTable(tilesList);
         gameBoard.setTilesTable(tilesTable);
         return gameBoard;
     }
@@ -74,17 +74,16 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
         } else {
             gameTile.setRotation(GameTile.ROTATION_DEGREES.get(rotationIndex + 1));
         }
-        List<List<GameTile>> tilesTable = sortAndCreateTable(tilesList);
+        List<List<GameTile>> tilesTable = sortAndCreateSquareTable(tilesList);
         gameBoard.setTilesTable(tilesTable);
         return gameBoard;
     }
 
     @Override
     public boolean checkSolution(GameBoard gameBoard) {
-        List<GameTile> tilesList = gameBoard.getTilesList();
         boolean result = true;
-        for (GameTile gameTile : tilesList) {
-            if (gameTile.getCurrentPos() != gameTile.getCorrectPos()
+        for (GameTile gameTile : gameBoard.getTilesList()) {
+            if (gameTile.getCurrentPos().equals(gameTile.getCorrectPos())
                     || gameTile.getRotation() != 0) {
                 result = false;
                 break;
@@ -93,7 +92,7 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
         return result;
     }
 
-    private List<List<GameTile>> sortAndCreateTable(List<GameTile> tilesList) {
+    private List<List<GameTile>> sortAndCreateSquareTable(List<GameTile> tilesList) {
         tilesList.sort(Comparator.comparingInt(GameTile::getCurrentPos));
         int gridSideLength = (int) Math.sqrt(tilesList.size());
         List<List<GameTile>> tilesTable = new ArrayList<>();

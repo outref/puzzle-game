@@ -57,11 +57,10 @@ public class PuzzleGameController {
         if (correctSolution) {
             message = "Correct!";
         } else {
-            message = "Incorrect! See reference image below -->";
+            message = "Incorrect! See correct image below -->";
         }
-        model.addAttribute("msgTop", message);
-        model.addAttribute("msgBottom", "Correct image reference:");
-        model.addAttribute("referenceImg", gameBoard.getRefImageUrl());
+        model.addAttribute("message", message);
+        model.addAttribute("originalImg", gameBoard.getOriginalImageUrl());
         model.addAttribute("tilesTable", gameBoard.getTilesTable());
         return "game";
     }

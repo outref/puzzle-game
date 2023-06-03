@@ -27,10 +27,10 @@ public class UploadController {
                               @RequestParam String imageName,
                               @RequestParam Integer sideLength,
                               @RequestParam("image") MultipartFile image) throws IOException {
-        String refImgUrl = uploadService.uploadImage(imageName, sideLength, image);
-        model.addAttribute("msg", "Image uploaded successfully!"
+        String imageUrl = uploadService.uploadImage(imageName, sideLength, image);
+        model.addAttribute("message", "Image uploaded successfully!"
                 + " Click 'Home' to see all images...");
-        model.addAttribute("img", refImgUrl);
+        model.addAttribute("image", imageUrl);
         return "upload";
     }
 }
