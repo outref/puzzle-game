@@ -110,30 +110,46 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
             default -> {
             }
         }
-        closeAdjacentEdges(table, tileNew.getTableX(), tileNew.getTableY());
         table[tileNew.getTableY()][tileNew.getTableX()] = tileNew;
+        closeAdjacentEdges(table, tileNew.getTableX(), tileNew.getTableY());
     }
 
     private void closeAdjacentEdges(SolverTile[][] table, int x, int y) {
         if (table[y - 1][x] != null) {
+            table[y][x].getEdges().stream()
+                    .filter(e -> e.getSide() == SolverTile.Edge.Side.TOP)
+                    .findFirst()
+                    .ifPresent(e -> e.setAvailable(false));
             table[y - 1][x].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.BOTTOM)
                     .findFirst()
                     .ifPresent(e -> e.setAvailable(false));
         }
         if (table[y + 1][x] != null) {
+            table[y][x].getEdges().stream()
+                    .filter(e -> e.getSide() == SolverTile.Edge.Side.BOTTOM)
+                    .findFirst()
+                    .ifPresent(e -> e.setAvailable(false));
             table[y + 1][x].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.TOP)
                     .findFirst()
                     .ifPresent(e -> e.setAvailable(false));
         }
         if (table[y][x - 1] != null) {
+            table[y][x].getEdges().stream()
+                    .filter(e -> e.getSide() == SolverTile.Edge.Side.LEFT)
+                    .findFirst()
+                    .ifPresent(e -> e.setAvailable(false));
             table[y][x - 1].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.RIGHT)
                     .findFirst()
                     .ifPresent(e -> e.setAvailable(false));
         }
         if (table[y][x + 1] != null) {
+            table[y][x].getEdges().stream()
+                    .filter(e -> e.getSide() == SolverTile.Edge.Side.RIGHT)
+                    .findFirst()
+                    .ifPresent(e -> e.setAvailable(false));
             table[y][x + 1].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.LEFT)
                     .findFirst()

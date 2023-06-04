@@ -33,17 +33,29 @@ public class PuzzleGameController {
                               @RequestParam Integer tile1Pos,
                               @RequestParam Integer tile2Pos) {
         GameBoard gameBoard = (GameBoard) session.getAttribute("game-board");
-        gameBoard = gameService.swapPuzzles(gameBoard, tile1Pos, tile2Pos);
+        String message = null;
+        try {
+            gameBoard = gameService.swapPuzzles(gameBoard, tile1Pos, tile2Pos);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        model.addAttribute("message", message);
         model.addAttribute("tilesTable", gameBoard.getTilesTable());
         return "game";
     }
 
     @PostMapping("/rotate")
     public String rotateRight(Model model,
-                          HttpSession session,
-                          @RequestParam Integer tilePos) {
+                              HttpSession session,
+                              @RequestParam Integer tilePos) {
         GameBoard gameBoard = (GameBoard) session.getAttribute("game-board");
-        gameBoard = gameService.rotateRight(gameBoard, tilePos);
+        String message = null;
+        try {
+            gameBoard = gameService.rotateRight(gameBoard, tilePos);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        model.addAttribute("message", message);
         model.addAttribute("tilesTable", gameBoard.getTilesTable());
         return "game";
     }

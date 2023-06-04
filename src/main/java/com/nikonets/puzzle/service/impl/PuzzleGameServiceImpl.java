@@ -49,11 +49,11 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
         GameTile gameTile1 = tilesList.stream()
                 .filter(t -> t.getCurrentPos().equals(tile1Pos))
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new RuntimeException("No such position " + tile1Pos));
         GameTile gameTile2 = tilesList.stream()
                 .filter(t -> t.getCurrentPos().equals(tile2Pos))
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new RuntimeException("No such position " + tile2Pos));
         gameTile1.setCurrentPos(tile2Pos);
         gameTile2.setCurrentPos(tile1Pos);
         List<List<GameTile>> tilesTable = sortAndCreateSquareTable(tilesList);
@@ -67,7 +67,7 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
         GameTile gameTile = tilesList.stream()
                 .filter(t -> t.getCurrentPos().equals(tilePos))
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new RuntimeException("No such position " + tilePos));
         int rotationIndex = GameTile.ROTATION_DEGREES.indexOf(gameTile.getRotation());
         if (rotationIndex == GameTile.ROTATION_DEGREES.size() - 1) {
             gameTile.setRotation(GameTile.ROTATION_DEGREES.get(0));

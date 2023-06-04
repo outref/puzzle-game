@@ -12,6 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileToImageServiceImpl implements FileToImageReaderService {
     @Override
     public BufferedImage fileToImage(MultipartFile file) {
+        if (!file.getContentType().equals("image/jpeg")) {
+            throw new InputReadingException(file.getOriginalFilename()
+                    + " is not a jpeg image!");
+        }
         BufferedImage inputImg;
         try (InputStream is = file.getInputStream()) {
             inputImg = ImageIO.read(is);

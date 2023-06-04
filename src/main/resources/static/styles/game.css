@@ -7,9 +7,13 @@ table, td, th {
     display: inline-block;
     position: relative;
     background-color: #eee;
+    width: 250px;
+    height: 250px;
     text-align: center;
 }
 .tile img {
+    width: 250px;
+    height: 250px;
     vertical-align: bottom;
 }
 .tile-number {
