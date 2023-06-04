@@ -1,12 +1,10 @@
 package com.nikonets.puzzle.service.impl;
 
 import com.nikonets.puzzle.repository.ImageRepository;
+import com.nikonets.puzzle.service.FileToImageReaderService;
 import com.nikonets.puzzle.service.UploadService;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.imageio.ImageIO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,12 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class UploadServiceImpl implements UploadService {
     private final ImageRepository imageRepository;
+    private final FileToImageReaderService readerService;
 
     @Override
-    public String uploadImage(String imageName, Integer sideLength,
-                              MultipartFile file) throws IOException {
-        InputStream is = file.getInputStream();
-        BufferedImage inputImg = ImageIO.read(is);
+    public String uploadImage(String imageName,
+                              Integer sideLength,
+                              MultipartFile file) {
+        BufferedImage inputImg = readerService.fileToImage(file);
 
         // initializing rows and columns
         int rows = sideLength;

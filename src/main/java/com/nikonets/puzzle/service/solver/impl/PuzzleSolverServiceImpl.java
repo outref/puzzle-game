@@ -2,14 +2,17 @@ package com.nikonets.puzzle.service.solver.impl;
 
 import com.nikonets.puzzle.model.SolverTile;
 import com.nikonets.puzzle.repository.ImageRepository;
-import com.nikonets.puzzle.service.solver.InputTilesProcessingService;
+import com.nikonets.puzzle.service.FileToImageReaderService;
 import com.nikonets.puzzle.service.solver.PuzzleSolverService;
 import com.nikonets.puzzle.service.solver.SolutionDrawingService;
+import com.nikonets.puzzle.service.solver.SolverTileCreatorService;
 import com.nikonets.puzzle.service.solver.TilesCompatabilityService;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,42 +21,25 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class PuzzleSolverServiceImpl implements PuzzleSolverService {
     private final ImageRepository repository;
-    private final InputTilesProcessingService inputProcessingService;
+    private final SolverTileCreatorService solverTileCreator;
     private final TilesCompatabilityService tilesCompatabilityService;
-    private final SolutionDrawingService solutionDrawingService;
+    private final SolutionDrawingService solutionDrawer;
+    private final FileToImageReaderService fileToImageReader;
 
     @Override
     public String solvePuzzle(MultipartFile[] files) {
-        List<SolverTile> tilesList = inputProcessingService.createSolverTilesFromInput(files);
+        List<SolverTile> tilesList = Arrays.stream(files)
+                .map(fileToImageReader::fileToImage)
+                .map(solverTileCreator::createSolverTile)
+                .collect(Collectors.toList());
         tilesCompatabilityService.setAllTilesCompatability(tilesList);
         SolverTile[][] table = new SolverTile[tilesList.size() * 2][tilesList.size() * 2];
         placeInitialTwoTilesOnTable(tilesList, table);
         for (int i = 0; i < tilesList.size() - 2; i++) {
             placeNextTileOnTable(tilesList, table);
         }
-        BufferedImage solutionImage = solutionDrawingService.drawSolutionFromTable(table);
+        BufferedImage solutionImage = solutionDrawer.drawSolutionFromTable(table);
         return repository.saveSolution(solutionImage);
-    }
-
-    private void placeNextTileOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
-        SolverTile.Edge edge1 = tilesList.stream()
-                .filter(SolverTile::isPlaced)
-                .flatMap(t -> t.getEdges().stream())
-                .filter(SolverTile.Edge::isAvailable)
-                .max(Comparator.comparingDouble(edge ->
-                        edge.getCompatabilityList().entrySet().stream()
-                        .filter(e -> !e.getKey().getTile().isPlaced())
-                        .map(Map.Entry::getValue)
-                        .max(Double::compareTo)
-                        .get()))
-                .get();
-        SolverTile.Edge edge2 = edge1.getCompatabilityList().entrySet().stream()
-                .filter(e -> !e.getKey().getTile().isPlaced())
-                .max(Comparator.comparingDouble(Map.Entry::getValue))
-                .get()
-                .getKey();
-
-        placeAdjacentOnTable(table, edge1, edge2);
     }
 
     private void placeInitialTwoTilesOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
@@ -61,8 +47,8 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                 .flatMap(t -> t.getEdges().stream())
                 .max(Comparator.comparingDouble(edge ->
                         edge.getCompatabilityList().values().stream()
-                        .max(Double::compareTo)
-                        .get()))
+                                .max(Double::compareTo)
+                                .get()))
                 .get();
         SolverTile tile1 = edge1.getTile();
         table[table.length / 2][table.length / 2] = tile1;
@@ -73,6 +59,27 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                 .max(Comparator.comparingDouble(Map.Entry::getValue))
                 .get()
                 .getKey();
+        placeAdjacentOnTable(table, edge1, edge2);
+    }
+
+    private void placeNextTileOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
+        SolverTile.Edge edge1 = tilesList.stream()
+                .filter(SolverTile::isPlaced)
+                .flatMap(t -> t.getEdges().stream())
+                .filter(SolverTile.Edge::isAvailable)
+                .max(Comparator.comparingDouble(edge ->
+                        edge.getCompatabilityList().entrySet().stream()
+                                .filter(e -> !e.getKey().getTile().isPlaced())
+                                .map(Map.Entry::getValue)
+                                .max(Double::compareTo)
+                                .get()))
+                .get();
+        SolverTile.Edge edge2 = edge1.getCompatabilityList().entrySet().stream()
+                .filter(e -> !e.getKey().getTile().isPlaced())
+                .max(Comparator.comparingDouble(Map.Entry::getValue))
+                .get()
+                .getKey();
+
         placeAdjacentOnTable(table, edge1, edge2);
     }
 
@@ -101,7 +108,8 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                 tileNew.setTableX(tilePlaced.getTableX() + 1);
                 tileNew.setTableY(tilePlaced.getTableY());
             }
-            default -> { }
+            default -> {
+            }
         }
         closeAdjacentEdges(table, tileNew.getTableX(), tileNew.getTableY());
         table[tileNew.getTableY()][tileNew.getTableX()] = tileNew;
@@ -112,38 +120,25 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
             table[y - 1][x].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.BOTTOM)
                     .findFirst()
-                    .get()
-                    .setAvailable(false);
+                    .ifPresent(e -> e.setAvailable(false));
         }
         if (table[y + 1][x] != null) {
             table[y + 1][x].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.TOP)
                     .findFirst()
-                    .get()
-                    .setAvailable(false);
+                    .ifPresent(e -> e.setAvailable(false));
         }
         if (table[y][x - 1] != null) {
             table[y][x - 1].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.RIGHT)
                     .findFirst()
-                    .get()
-                    .setAvailable(false);
+                    .ifPresent(e -> e.setAvailable(false));
         }
         if (table[y][x + 1] != null) {
             table[y][x + 1].getEdges().stream()
                     .filter(e -> e.getSide() == SolverTile.Edge.Side.LEFT)
                     .findFirst()
-                    .get()
-                    .setAvailable(false);
+                    .ifPresent(e -> e.setAvailable(false));
         }
     }
 }
-
-
-
-
-
-
-
-
-

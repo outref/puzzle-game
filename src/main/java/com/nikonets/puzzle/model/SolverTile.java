@@ -20,7 +20,6 @@ public class SolverTile {
     private boolean placed = false;
     private int tableX;
     private int tableY;
-    private String fileName;
 
     private List<Edge> initEdges() {
         List<Edge> edgesList = new ArrayList<>();

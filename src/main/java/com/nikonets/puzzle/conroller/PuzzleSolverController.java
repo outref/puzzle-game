@@ -1,7 +1,6 @@
 package com.nikonets.puzzle.conroller;
 
 import com.nikonets.puzzle.service.solver.PuzzleSolverService;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +22,17 @@ public class PuzzleSolverController {
     }
 
     @PostMapping
-    public String uploadImage(Model model,
-                              @RequestParam("files") MultipartFile[] files) throws IOException {
-        String solutionUrl = puzzleSolverService.solvePuzzle(files);
+    public String uploadTileImages(Model model,
+                                   @RequestParam("files") MultipartFile[] files) {
+        String solutionUrl = null;
+        String message = "Image solved successfully!";
+        try {
+            solutionUrl = puzzleSolverService.solvePuzzle(files);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
         model.addAttribute("solutionUrl", solutionUrl);
-        model.addAttribute("msg", "Image solved successfully!");
+        model.addAttribute("message", message);
         return "solver";
     }
 }
