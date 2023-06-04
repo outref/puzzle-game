@@ -54,6 +54,6 @@ public class UploadServiceImpl implements UploadService {
                 currentImg++;
             }
         }
-        return puzzleRepository.saveTiles(imageName, inputImg, tileImages);
+        return puzzleRepository.savePuzzle(imageName, inputImg, tileImages);
     }
 }

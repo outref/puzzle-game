@@ -10,41 +10,23 @@ public class TilesCompatabilityServiceImpl implements TilesCompatabilityService 
     private static final double PIXEL_MAX_VALUE = 16777216;
 
     @Override
-    public List<SolverTile> setAllTilesCompatability(List<SolverTile> tilesList) {
-        //bottom+top
+    public List<SolverTile> setTilesCompatabilityBySides(List<SolverTile> tilesList,
+                                                         SolverTile.Edge.Side side1,
+                                                         SolverTile.Edge.Side side2) {
         for (SolverTile tile1 : tilesList) {
-            SolverTile.Edge bottom = tile1.getEdges().stream()
-                    .filter(e -> e.getSide() == SolverTile.Edge.Side.BOTTOM)
+            SolverTile.Edge edge1 = tile1.getEdges().stream()
+                    .filter(e -> e.getSide() == side1)
                     .findFirst()
                     .get();
             for (SolverTile tile2 : tilesList) {
                 if (tile2 != tile1) {
-                    SolverTile.Edge top = tile2.getEdges().stream()
-                            .filter(e -> e.getSide() == SolverTile.Edge.Side.TOP)
+                    SolverTile.Edge edge2 = tile2.getEdges().stream()
+                            .filter(e -> e.getSide() == side2)
                             .findFirst()
                             .get();
-                    double compatability = calculateEdgesCompatability(bottom, top);
-                    bottom.getCompatabilityList().put(top, compatability);
-                    top.getCompatabilityList().put(bottom, compatability);
-                }
-            }
-        }
-
-        //right+left
-        for (SolverTile tile1 : tilesList) {
-            SolverTile.Edge right = tile1.getEdges().stream()
-                    .filter(e -> e.getSide() == SolverTile.Edge.Side.RIGHT)
-                    .findFirst()
-                    .get();
-            for (SolverTile tile2 : tilesList) {
-                if (tile2 != tile1) {
-                    SolverTile.Edge left = tile2.getEdges().stream()
-                            .filter(e -> e.getSide() == SolverTile.Edge.Side.LEFT)
-                            .findFirst()
-                            .get();
-                    double compatability = calculateEdgesCompatability(right, left);
-                    right.getCompatabilityList().put(left, compatability);
-                    left.getCompatabilityList().put(right, compatability);
+                    double compatability = calculateEdgesCompatability(edge1, edge2);
+                    edge1.getCompatabilityList().put(edge2, compatability);
+                    edge2.getCompatabilityList().put(edge1, compatability);
                 }
             }
         }
@@ -52,6 +34,9 @@ public class TilesCompatabilityServiceImpl implements TilesCompatabilityService 
     }
 
     private double calculateEdgesCompatability(SolverTile.Edge edge1, SolverTile.Edge edge2) {
+        if (edge1.getPixels().length != edge2.getPixels().length) {
+            return 0; //sides of different length = incompatible
+        }
         int[] edge1Pixels = edge1.getPixels();
         int[] edge2Pixels = edge2.getPixels();
         double sum = 0;

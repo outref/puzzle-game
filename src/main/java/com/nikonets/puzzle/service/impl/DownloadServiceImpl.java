@@ -21,7 +21,7 @@ public class DownloadServiceImpl implements DownloadService {
     public void streamZipToResponse(HttpServletResponse response, String imageName) {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment; filename=download.zip");
-        List<String> filesList = puzzleRepository.getAllFilesByImageName(imageName);
+        List<String> filesList = puzzleRepository.getPuzzleFilesByImageName(imageName);
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
             for (String fileName : filesList) {
                 FileSystemResource fileSystemResource = new FileSystemResource(fileName);

@@ -32,7 +32,10 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                 .map(fileToImageReader::fileToImage)
                 .map(solverTileCreator::createSolverTile)
                 .collect(Collectors.toList());
-        tilesCompatabilityService.setAllTilesCompatability(tilesList);
+        tilesCompatabilityService.setTilesCompatabilityBySides(tilesList,
+                SolverTile.Edge.Side.TOP, SolverTile.Edge.Side.BOTTOM);
+        tilesCompatabilityService.setTilesCompatabilityBySides(tilesList,
+                SolverTile.Edge.Side.RIGHT, SolverTile.Edge.Side.LEFT);
         SolverTile[][] solutionTable = new SolverTile[tilesList.size() * 2][tilesList.size() * 2];
         placeInitialTileOnTable(tilesList, solutionTable);
         for (int i = 0; i < tilesList.size() - 1; i++) {

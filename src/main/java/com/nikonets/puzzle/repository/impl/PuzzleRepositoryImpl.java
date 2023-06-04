@@ -22,9 +22,9 @@ public class PuzzleRepositoryImpl implements PuzzleRepository {
     private String solutionsDir;
 
     @Override
-    public String saveTiles(String imageName,
-                            BufferedImage originalImg,
-                            BufferedImage[] tileImages) {
+    public String savePuzzle(String imageName,
+                             BufferedImage originalImg,
+                             BufferedImage[] tileImages) {
         String dirPath = imagesDir + imageName;
         File tilesDir = new File(dirPath);
         tilesDir.mkdirs();
@@ -84,7 +84,7 @@ public class PuzzleRepositoryImpl implements PuzzleRepository {
     }
 
     @Override
-    public List<String> getAllFilesByImageName(String imageName) {
+    public List<String> getPuzzleFilesByImageName(String imageName) {
         File dir = new File(imagesDir + imageName);
         return Arrays.stream(dir.listFiles())
                 .filter(File::isFile)

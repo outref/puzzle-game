@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 
 public interface PuzzleRepository {
-    String saveTiles(String imageName, BufferedImage originalImg, BufferedImage[] tileImgs);
+    String savePuzzle(String imageName, BufferedImage originalImg, BufferedImage[] tileImgs);
 
     List<String> getAllPuzzles();
 
@@ -14,5 +14,5 @@ public interface PuzzleRepository {
 
     String saveSolution(BufferedImage solution);
 
-    List<String> getAllFilesByImageName(String imageName);
+    List<String> getPuzzleFilesByImageName(String imageName);
 }
