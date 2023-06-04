@@ -83,7 +83,7 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
     public boolean checkSolution(GameBoard gameBoard) {
         boolean result = true;
         for (GameTile gameTile : gameBoard.getTilesList()) {
-            if (gameTile.getCurrentPos().equals(gameTile.getCorrectPos())
+            if (!gameTile.getCurrentPos().equals(gameTile.getCorrectPos())
                     || gameTile.getRotation() != 0) {
                 result = false;
                 break;

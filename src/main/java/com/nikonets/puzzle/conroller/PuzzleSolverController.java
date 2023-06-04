@@ -1,6 +1,6 @@
 package com.nikonets.puzzle.conroller;
 
-import com.nikonets.puzzle.service.PuzzleSolverService;
+import com.nikonets.puzzle.service.solver.PuzzleSolverService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
