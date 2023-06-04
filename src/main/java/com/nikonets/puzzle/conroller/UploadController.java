@@ -29,7 +29,7 @@ public class UploadController {
         String message = "Image uploaded successfully! Click 'Home' to see all images...";
         String imageUrl = null;
         try {
-            imageUrl = uploadService.uploadImage(imageName, sideLength, image);
+            imageUrl = uploadService.uploadAndCutImage(imageName, sideLength, image);
         } catch (Exception e) {
             message = e.getMessage();
         }

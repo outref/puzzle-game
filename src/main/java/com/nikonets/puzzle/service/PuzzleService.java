@@ -2,6 +2,6 @@ package com.nikonets.puzzle.service;
 
 import java.util.List;
 
-public interface ImageService {
-    List<String> getImagesList();
+public interface PuzzleService {
+    List<String> getAllPuzzles();
 }

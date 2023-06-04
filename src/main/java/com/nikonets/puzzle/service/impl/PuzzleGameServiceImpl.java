@@ -2,7 +2,7 @@ package com.nikonets.puzzle.service.impl;
 
 import com.nikonets.puzzle.model.GameBoard;
 import com.nikonets.puzzle.model.GameTile;
-import com.nikonets.puzzle.repository.ImageRepository;
+import com.nikonets.puzzle.repository.PuzzleRepository;
 import com.nikonets.puzzle.service.PuzzleGameService;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class PuzzleGameServiceImpl implements PuzzleGameService {
-    private final ImageRepository repository;
+    private final PuzzleRepository repository;
 
     @Override
     public GameBoard createInitTable(String imageName) {

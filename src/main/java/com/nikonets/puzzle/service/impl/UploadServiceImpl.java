@@ -1,6 +1,6 @@
 package com.nikonets.puzzle.service.impl;
 
-import com.nikonets.puzzle.repository.ImageRepository;
+import com.nikonets.puzzle.repository.PuzzleRepository;
 import com.nikonets.puzzle.service.FileToImageReaderService;
 import com.nikonets.puzzle.service.UploadService;
 import java.awt.Graphics2D;
@@ -12,13 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Service
 public class UploadServiceImpl implements UploadService {
-    private final ImageRepository imageRepository;
+    private final PuzzleRepository puzzleRepository;
     private final FileToImageReaderService readerService;
 
     @Override
-    public String uploadImage(String imageName,
-                              Integer sideLength,
-                              MultipartFile file) {
+    public String uploadAndCutImage(String imageName,
+                                    Integer sideLength,
+                                    MultipartFile file) {
         BufferedImage inputImg = readerService.fileToImage(file);
 
         // initializing rows and columns
@@ -54,6 +54,6 @@ public class UploadServiceImpl implements UploadService {
                 currentImg++;
             }
         }
-        return imageRepository.saveTiles(imageName, inputImg, tileImages);
+        return puzzleRepository.saveTiles(imageName, inputImg, tileImages);
     }
 }

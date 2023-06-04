@@ -1,6 +1,6 @@
 package com.nikonets.puzzle.repository.impl;
 
-import com.nikonets.puzzle.repository.ImageRepository;
+import com.nikonets.puzzle.repository.PuzzleRepository;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ImageRepositoryImpl implements ImageRepository {
+public class PuzzleRepositoryImpl implements PuzzleRepository {
     private static final String ORIGINAL_IMG_NAME = "original.jpg";
     private static final String IMG_FORMAT = "jpg";
     @Value("${images.storage.dir}")
@@ -50,7 +50,7 @@ public class ImageRepositoryImpl implements ImageRepository {
     }
 
     @Override
-    public List<String> getAllImages() {
+    public List<String> getAllPuzzles() {
         File dir = new File(imagesDir);
         return Arrays.asList(dir.list());
     }

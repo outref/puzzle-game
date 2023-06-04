@@ -3,10 +3,10 @@ package com.nikonets.puzzle.repository;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
-public interface ImageRepository {
+public interface PuzzleRepository {
     String saveTiles(String imageName, BufferedImage originalImg, BufferedImage[] tileImgs);
 
-    List<String> getAllImages();
+    List<String> getAllPuzzles();
 
     List<String> getTilesUrlsByImageName(String imageName);
 

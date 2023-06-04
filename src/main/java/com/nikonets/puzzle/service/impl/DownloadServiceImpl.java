@@ -1,6 +1,6 @@
 package com.nikonets.puzzle.service.impl;
 
-import com.nikonets.puzzle.repository.ImageRepository;
+import com.nikonets.puzzle.repository.PuzzleRepository;
 import com.nikonets.puzzle.service.DownloadService;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -15,13 +15,13 @@ import org.springframework.util.StreamUtils;
 @RequiredArgsConstructor
 @Service
 public class DownloadServiceImpl implements DownloadService {
-    private final ImageRepository imageRepository;
+    private final PuzzleRepository puzzleRepository;
 
     @Override
     public void streamZipToResponse(HttpServletResponse response, String imageName) {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment; filename=download.zip");
-        List<String> filesList = imageRepository.getAllFilesByImageName(imageName);
+        List<String> filesList = puzzleRepository.getAllFilesByImageName(imageName);
         try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
             for (String fileName : filesList) {
                 FileSystemResource fileSystemResource = new FileSystemResource(fileName);

@@ -1,7 +1,7 @@
 package com.nikonets.puzzle.service.solver.impl;
 
 import com.nikonets.puzzle.model.SolverTile;
-import com.nikonets.puzzle.repository.ImageRepository;
+import com.nikonets.puzzle.repository.PuzzleRepository;
 import com.nikonets.puzzle.service.FileToImageReaderService;
 import com.nikonets.puzzle.service.solver.PuzzleSolverService;
 import com.nikonets.puzzle.service.solver.SolutionDrawingService;
@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Service
 public class PuzzleSolverServiceImpl implements PuzzleSolverService {
-    private final ImageRepository repository;
+    private final PuzzleRepository repository;
     private final SolverTileCreatorService solverTileCreator;
     private final TilesCompatabilityService tilesCompatabilityService;
     private final SolutionDrawingService solutionDrawer;
@@ -33,33 +33,29 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                 .map(solverTileCreator::createSolverTile)
                 .collect(Collectors.toList());
         tilesCompatabilityService.setAllTilesCompatability(tilesList);
-        SolverTile[][] table = new SolverTile[tilesList.size() * 2][tilesList.size() * 2];
-        placeInitialTwoTilesOnTable(tilesList, table);
-        for (int i = 0; i < tilesList.size() - 2; i++) {
-            placeNextTileOnTable(tilesList, table);
+        SolverTile[][] solutionTable = new SolverTile[tilesList.size() * 2][tilesList.size() * 2];
+        placeInitialTileOnTable(tilesList, solutionTable);
+        for (int i = 0; i < tilesList.size() - 1; i++) {
+            placeNextTileOnTable(tilesList, solutionTable);
         }
-        BufferedImage solutionImage = solutionDrawer.drawSolutionFromTable(table);
+        BufferedImage solutionImage = solutionDrawer.drawSolutionFromTable(solutionTable);
         return repository.saveSolution(solutionImage);
     }
 
-    private void placeInitialTwoTilesOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
-        SolverTile.Edge edge1 = tilesList.stream()
+    //putting tile with the best compatability in the center of the table
+    private void placeInitialTileOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
+        SolverTile.Edge edge = tilesList.stream()
                 .flatMap(t -> t.getEdges().stream())
-                .max(Comparator.comparingDouble(edge ->
-                        edge.getCompatabilityList().values().stream()
+                .max(Comparator.comparingDouble(e ->
+                        e.getCompatabilityList().values().stream()
                                 .max(Double::compareTo)
                                 .get()))
                 .get();
-        SolverTile tile1 = edge1.getTile();
+        SolverTile tile1 = edge.getTile();
         table[table.length / 2][table.length / 2] = tile1;
         tile1.setTableX(table.length / 2);
         tile1.setTableY(table.length / 2);
         tile1.setPlaced(true);
-        SolverTile.Edge edge2 = edge1.getCompatabilityList().entrySet().stream()
-                .max(Comparator.comparingDouble(Map.Entry::getValue))
-                .get()
-                .getKey();
-        placeAdjacentOnTable(table, edge1, edge2);
     }
 
     private void placeNextTileOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
