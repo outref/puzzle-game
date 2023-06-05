@@ -1,5 +1,6 @@
 package com.nikonets.puzzle;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @Configuration
 public class PuzzleApplication implements WebMvcConfigurer {
+    @Value("${storage.dir}")
+    private String storageDir;
 
     public static void main(String[] args) {
         SpringApplication.run(PuzzleApplication.class, args);
@@ -21,6 +24,6 @@ public class PuzzleApplication implements WebMvcConfigurer {
                 .addResourceLocations(
                         "classpath:/",
                         "classpath:static/",
-                        "file:images");
+                        "file:" + storageDir);
     }
 }

@@ -8,14 +8,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/game")
 public class PuzzleGameController {
     private final PuzzleGameService gameService;
 
-    @GetMapping("/game")
+    @GetMapping
     public String loadGame(Model model,
                            HttpSession session,
                            @RequestParam String imageName) {
@@ -25,28 +27,40 @@ public class PuzzleGameController {
         return "game";
     }
 
-    @PostMapping("/game/swap")
+    @PostMapping("/swap")
     public String swapPuzzles(Model model,
                               HttpSession session,
                               @RequestParam Integer tile1Pos,
                               @RequestParam Integer tile2Pos) {
         GameBoard gameBoard = (GameBoard) session.getAttribute("game-board");
-        gameBoard = gameService.swapPuzzles(gameBoard, tile1Pos, tile2Pos);
+        String message = null;
+        try {
+            gameBoard = gameService.swapPuzzles(gameBoard, tile1Pos, tile2Pos);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        model.addAttribute("message", message);
         model.addAttribute("tilesTable", gameBoard.getTilesTable());
         return "game";
     }
 
-    @PostMapping("/game/rotate")
+    @PostMapping("/rotate")
     public String rotateRight(Model model,
-                          HttpSession session,
-                          @RequestParam Integer tilePos) {
+                              HttpSession session,
+                              @RequestParam Integer tilePos) {
         GameBoard gameBoard = (GameBoard) session.getAttribute("game-board");
-        gameBoard = gameService.rotateRight(gameBoard, tilePos);
+        String message = null;
+        try {
+            gameBoard = gameService.rotateRight(gameBoard, tilePos);
+        } catch (Exception e) {
+            message = e.getMessage();
+        }
+        model.addAttribute("message", message);
         model.addAttribute("tilesTable", gameBoard.getTilesTable());
         return "game";
     }
 
-    @PostMapping("/game/check")
+    @PostMapping("/check")
     public String checkSolution(Model model,
                                 HttpSession session) {
         GameBoard gameBoard = (GameBoard) session.getAttribute("game-board");
@@ -55,11 +69,10 @@ public class PuzzleGameController {
         if (correctSolution) {
             message = "Correct!";
         } else {
-            message = "Incorrect!";
+            message = "Incorrect! See correct image below -->";
         }
-        model.addAttribute("msgTop", message);
-        model.addAttribute("msgBottom", "Correct image reference:");
-        model.addAttribute("referenceImg", gameBoard.getRefImageUrl());
+        model.addAttribute("message", message);
+        model.addAttribute("originalImg", gameBoard.getOriginalImageUrl());
         model.addAttribute("tilesTable", gameBoard.getTilesTable());
         return "game";
     }
