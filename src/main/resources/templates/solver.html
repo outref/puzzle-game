@@ -12,6 +12,8 @@
 
 <div>
     <h2>Upload your puzzle tiles:</h2>
+    <h4>JPG, up to 5MB combined</h4>
+    <h4>Please, don't rotate individual tiles)</h4>
     <form method="post" th:action="@{/solver}" enctype="multipart/form-data">
         <input required type="file" multiple name="files"><br>
         <button type="submit">Solve!</button>

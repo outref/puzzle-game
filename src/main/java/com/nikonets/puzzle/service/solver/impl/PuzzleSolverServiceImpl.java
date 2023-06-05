@@ -36,10 +36,11 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                 SolverTile.Edge.Side.TOP, SolverTile.Edge.Side.BOTTOM);
         tilesCompatabilityService.setTilesCompatabilityBySides(tilesList,
                 SolverTile.Edge.Side.RIGHT, SolverTile.Edge.Side.LEFT);
+        //create table(canvas) for solution
         SolverTile[][] solutionTable = new SolverTile[tilesList.size() * 2][tilesList.size() * 2];
         placeInitialTileOnTable(tilesList, solutionTable);
         for (int i = 0; i < tilesList.size() - 1; i++) {
-            placeNextTileOnTable(tilesList, solutionTable);
+            placeMostCompatibleOnTable(tilesList, solutionTable);
         }
         BufferedImage solutionImage = solutionDrawer.drawSolutionFromTable(solutionTable);
         return repository.saveSolution(solutionImage);
@@ -61,7 +62,8 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
         tile1.setPlaced(true);
     }
 
-    private void placeNextTileOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
+    private void placeMostCompatibleOnTable(List<SolverTile> tilesList, SolverTile[][] table) {
+        //find tile placed on table that has the highest compatability with unplaced tile
         SolverTile.Edge edge1 = tilesList.stream()
                 .filter(SolverTile::isPlaced)
                 .flatMap(t -> t.getEdges().stream())
@@ -73,18 +75,19 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
                                 .max(Double::compareTo)
                                 .get()))
                 .get();
+        //find opposite edge
         SolverTile.Edge edge2 = edge1.getCompatabilityList().entrySet().stream()
                 .filter(e -> !e.getKey().getTile().isPlaced())
                 .max(Comparator.comparingDouble(Map.Entry::getValue))
                 .get()
                 .getKey();
 
-        placeAdjacentOnTable(table, edge1, edge2);
+        placeTileOnTable(table, edge1, edge2);
     }
 
-    private void placeAdjacentOnTable(SolverTile[][] table,
-                                      SolverTile.Edge edgePlaced,
-                                      SolverTile.Edge edgeNew) {
+    private void placeTileOnTable(SolverTile[][] table,
+                                  SolverTile.Edge edgePlaced,
+                                  SolverTile.Edge edgeNew) {
         edgePlaced.setAvailable(false);
         edgeNew.setAvailable(false);
         SolverTile tilePlaced = edgePlaced.getTile();
@@ -114,6 +117,7 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
         closeAdjacentEdges(table, tileNew.getTableX(), tileNew.getTableY());
     }
 
+    //make common edges of given tile and all neighbouring tiles unavailable(used)
     private void closeAdjacentEdges(SolverTile[][] table, int x, int y) {
         if (table[y - 1][x] != null) {
             table[y][x].getEdges().stream()

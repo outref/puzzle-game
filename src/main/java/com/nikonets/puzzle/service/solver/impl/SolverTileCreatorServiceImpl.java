@@ -14,6 +14,7 @@ public class SolverTileCreatorServiceImpl implements SolverTileCreatorService {
         return solverTile;
     }
 
+    //fill the array representing pixels(colors) on the edge of the tile
     private void setEdgesPixels(SolverTile tile) {
         for (SolverTile.Edge edge : tile.getEdges()) {
             int width = tile.getTileImage().getWidth();
