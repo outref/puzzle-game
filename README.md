@@ -4,17 +4,17 @@
 Puzzle Game/Cutter/Solver with rectangular puzzle-pieces, made from your images, running on SpringBoot and Thymeleaf for dynamic front-end.
 
 ## 🚀 Demo
-The application is deployed on AWS EC2, you can try it with this link:
-http://13.48.85.241:8090/
+The application is deployed on AWS EC2, you can try it with this link:  
+http://13.48.85.241:8090/  
 Use credentials: Username - puzzleGame, Password - puzzleGame
 
 ## 🔐 Security
-Application implements In-Memory authentication with a single configured user.
-(Security is needed mainly to be able to deploy the app safely)
+Application implements In-Memory authentication with a single configured user.  
+(Security is needed mainly to be able to deploy the app safely)  
 
-Please use these credentials:
-Username - puzzleGame
-Password - puzzleGame
+Please use these credentials:  
+Username - puzzleGame  
+Password - puzzleGame  
 
 ## 🎯 Features
 - `/`   [Home] : display all uploaded pictures (puzzles) with links to play with them or download the Zip file with all puzzle-pieces in .jpg format.
@@ -35,7 +35,10 @@ Password - puzzleGame
 - <b> PuzzleApplication </b> - @SpringBootApplication class with additional configuration.
 - <b> StorageInitializr </b> - Bean that is responsible for creating a folder for keeping images on application startup.
 - <b> WebSecurityConfig </b> - @Configuration class with security-config beans.
-
+- <b> resources/static.styles/ </b> - CSS styles.
+- <b> resources/templates/ </b> - Thymeleaf .html template files. 
+- <b> application.properties </b> - propergies used by SpringBoot to auto-configure the application.
+ 
 Application is structured according to N-Tier structure pattern with Presentation, Service and Data layers.
 
 ## 🤖 Technologies
