@@ -3,7 +3,7 @@ package com.nikonets.puzzle.service.solver.impl;
 import com.nikonets.puzzle.model.SolverTile;
 import com.nikonets.puzzle.model.TileEdge;
 import com.nikonets.puzzle.repository.PuzzleRepository;
-import com.nikonets.puzzle.service.FileToImageReaderService;
+import com.nikonets.puzzle.service.FileToImageService;
 import com.nikonets.puzzle.service.solver.PuzzleSolverService;
 import com.nikonets.puzzle.service.solver.SolutionDrawingService;
 import com.nikonets.puzzle.service.solver.SolverTileService;
@@ -25,7 +25,7 @@ public class PuzzleSolverServiceImpl implements PuzzleSolverService {
     private final SolverTileService solverTileService;
     private final TilesCompatabilityService tilesCompatabilityService;
     private final SolutionDrawingService solutionDrawer;
-    private final FileToImageReaderService fileToImageReader;
+    private final FileToImageService fileToImageReader;
 
     @Override
     public String solvePuzzle(MultipartFile[] files) {

@@ -1,7 +1,7 @@
 package com.nikonets.puzzle.service.impl;
 
 import com.nikonets.puzzle.exception.InputReadingException;
-import com.nikonets.puzzle.service.FileToImageReaderService;
+import com.nikonets.puzzle.service.FileToImageService;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class FileToImageServiceImpl implements FileToImageReaderService {
+public class FileToImageServiceImpl implements FileToImageService {
     @Override
     public BufferedImage fileToImage(MultipartFile file) {
         if (!file.getContentType().equals("image/jpeg")) {

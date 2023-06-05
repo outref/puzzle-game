@@ -1,5 +1,6 @@
 package com.nikonets.puzzle.service.impl;
 
+import com.nikonets.puzzle.exception.GameException;
 import com.nikonets.puzzle.model.GameBoard;
 import com.nikonets.puzzle.model.GameTile;
 import com.nikonets.puzzle.repository.PuzzleRepository;
@@ -50,11 +51,11 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
         GameTile gameTile1 = tilesList.stream()
                 .filter(t -> t.getCurrentPos().equals(tile1Pos))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No such position " + tile1Pos));
+                .orElseThrow(() -> new GameException("No such position " + tile1Pos));
         GameTile gameTile2 = tilesList.stream()
                 .filter(t -> t.getCurrentPos().equals(tile2Pos))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No such position " + tile2Pos));
+                .orElseThrow(() -> new GameException("No such position " + tile2Pos));
         gameTile1.setCurrentPos(tile2Pos);
         gameTile2.setCurrentPos(tile1Pos);
         List<List<GameTile>> tilesTable = sortAndCreateSquareTable(tilesList);
@@ -68,7 +69,7 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
         GameTile gameTile = tilesList.stream()
                 .filter(t -> t.getCurrentPos().equals(tilePos))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("No such position " + tilePos));
+                .orElseThrow(() -> new GameException("No such position " + tilePos));
         int rotationIndex = ROTATION_DEGREES.indexOf(gameTile.getRotation());
         if (rotationIndex == ROTATION_DEGREES.size() - 1) {
             gameTile.setRotation(ROTATION_DEGREES.get(0));

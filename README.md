@@ -23,7 +23,8 @@ Password - puzzleGame
 - `/solver`  [Puzzle Solver] : upload your puzzle-pieces (rectangular JPG images that are part of one sliced image). Puzzle tiles can be of any size, aspekt-ratio and not necessarily all equal (the only conditins are - JPG format, uprigth position, 5MB combined size). Algorithm works very well with quantities of up to 100 tiles, but can partially fail with bigger amounts.
 
 ## 📖 Structure
-![structure](https://raw.githubusercontent.com/outref/readme-recources/main/puzzle-game-structure.jpg)
+![structure](https://raw.githubusercontent.com/outref/readme-recources/main/puzzle-game-structure2.jpg)
+- <b> config/ </b> - all the <b>@Config</b> beans: WebSecurityConfig and AppConfig.
 - <b> controller/ </b> - all the <b>@Controller</b>s serving the application's endpoints.
 - <b> dto/ </b> - package for <b>DTO</b> classes.
 - <b> exception/ </b> - holds all custom exception classes.
@@ -31,11 +32,9 @@ Password - puzzleGame
 -- <b> GameBoard </b> encapsulates the information about all tiles on the board with other game-related information  
 -- <b> GameTile </b> keeps track of tile's image, position and rotation during the game.  
 -- <b> SolverTile </b> holds all the information about each tile that puzzle-solving algorithm needs to assemble the solution.
-- <b> repository/ </b> - contains interface responsible for saving images as files.
+- <b> repository/ </b> - contains interface responsible for saving images as files + StorageInitializr bean that is responsible for creating a folder for keeping images on application startup.
 - <b> service/ </b> - service layer of the application, all the logic is here.
-- <b> PuzzleApplication </b> - @SpringBootApplication class with additional configuration.
-- <b> StorageInitializr </b> - Bean that is responsible for creating a folder for keeping images on application startup.
-- <b> WebSecurityConfig </b> - @Configuration class with security-config beans.
+- <b> PuzzleApplication </b> - @SpringBootApplication class.
 - <b> resources/static.styles/ </b> - CSS styles.
 - <b> resources/templates/ </b> - Thymeleaf .html template files. 
 - <b> application.properties </b> - properties used by SpringBoot to auto-configure the application.

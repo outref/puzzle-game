@@ -1,7 +1,7 @@
 package com.nikonets.puzzle.service.impl;
 
 import com.nikonets.puzzle.repository.PuzzleRepository;
-import com.nikonets.puzzle.service.FileToImageReaderService;
+import com.nikonets.puzzle.service.FileToImageService;
 import com.nikonets.puzzle.service.UploadService;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -13,13 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class UploadServiceImpl implements UploadService {
     private final PuzzleRepository puzzleRepository;
-    private final FileToImageReaderService readerService;
+    private final FileToImageService fileToImageService;
 
     @Override
     public String uploadAndCutImage(String imageName,
                                     Integer sideLength,
                                     MultipartFile file) {
-        BufferedImage inputImg = readerService.fileToImage(file);
+        BufferedImage inputImg = fileToImageService.fileToImage(file);
 
         // Array to hold sub-images
         int rows = sideLength;
