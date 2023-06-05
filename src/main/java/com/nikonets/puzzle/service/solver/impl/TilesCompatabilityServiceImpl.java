@@ -1,6 +1,7 @@
 package com.nikonets.puzzle.service.solver.impl;
 
 import com.nikonets.puzzle.model.SolverTile;
+import com.nikonets.puzzle.model.TileEdge;
 import com.nikonets.puzzle.service.solver.TilesCompatabilityService;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -11,34 +12,34 @@ public class TilesCompatabilityServiceImpl implements TilesCompatabilityService 
 
     @Override
     public List<SolverTile> setTilesCompatabilityBySides(List<SolverTile> tilesList,
-                                                         SolverTile.Edge.Side side1,
-                                                         SolverTile.Edge.Side side2) {
+                                                         TileEdge.Side side1,
+                                                         TileEdge.Side side2) {
         for (SolverTile tile1 : tilesList) {
-            SolverTile.Edge edge1 = tile1.getEdges().stream()
+            TileEdge tileEdge1 = tile1.getTileEdges().stream()
                     .filter(e -> e.getSide() == side1)
                     .findFirst()
                     .get();
             for (SolverTile tile2 : tilesList) {
                 if (tile2 != tile1) {
-                    SolverTile.Edge edge2 = tile2.getEdges().stream()
+                    TileEdge tileEdge2 = tile2.getTileEdges().stream()
                             .filter(e -> e.getSide() == side2)
                             .findFirst()
                             .get();
-                    double compatability = calculateEdgesCompatability(edge1, edge2);
-                    edge1.getCompatabilityList().put(edge2, compatability);
-                    edge2.getCompatabilityList().put(edge1, compatability);
+                    double compatability = calculateEdgesCompatability(tileEdge1, tileEdge2);
+                    tileEdge1.getCompatabilityList().put(tileEdge2, compatability);
+                    tileEdge2.getCompatabilityList().put(tileEdge1, compatability);
                 }
             }
         }
         return tilesList;
     }
 
-    private double calculateEdgesCompatability(SolverTile.Edge edge1, SolverTile.Edge edge2) {
-        if (edge1.getPixels().length != edge2.getPixels().length) {
+    private double calculateEdgesCompatability(TileEdge tileEdge1, TileEdge tileEdge2) {
+        if (tileEdge1.getPixels().length != tileEdge2.getPixels().length) {
             return 0; //sides of different length = incompatible
         }
-        int[] edge1Pixels = edge1.getPixels();
-        int[] edge2Pixels = edge2.getPixels();
+        int[] edge1Pixels = tileEdge1.getPixels();
+        int[] edge2Pixels = tileEdge2.getPixels();
         double sum = 0;
         for (int i = 0; i < edge1Pixels.length; i++) {
             sum += (PIXEL_MAX_VALUE - Math.abs(edge1Pixels[i] - edge2Pixels[i])) / PIXEL_MAX_VALUE;

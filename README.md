@@ -10,11 +10,11 @@ Use credentials: Username - puzzleGame, Password - puzzleGame
 
 ## 🔐 Security
 Application implements In-Memory authentication with a single configured user.  
-(Security is needed mainly to be able to deploy the app safely)  
+(Security is needed mainly to be able to deploy the app safely)
 
 Please use these credentials:  
 Username - puzzleGame  
-Password - puzzleGame  
+Password - puzzleGame
 
 ## 🎯 Features
 - `/`   [Home] : display all uploaded pictures (puzzles) with links to play with them or download the Zip file with all puzzle-pieces in .jpg format.
@@ -28,8 +28,8 @@ Password - puzzleGame
 - <b> dto/ </b> - package for <b>DTO</b> classes.
 - <b> exception/ </b> - holds all custom exception classes.
 - <b> model/ </b> - model classes, main entities used in application: 
--- <b> GameBoard </b> encapsulates the information about all tiles on the board with other game-related information
--- <b> GameTile </b> keeps track of tile's image, position and rotation during the game.
+-- <b> GameBoard </b> encapsulates the information about all tiles on the board with other game-related information  
+-- <b> GameTile </b> keeps track of tile's image, position and rotation during the game.  
 -- <b> SolverTile </b> holds all the information about each tile that puzzle-solving algorithm needs to assemble the solution.
 - <b> repository/ </b> - contains interface responsible for saving images as files.
 - <b> service/ </b> - service layer of the application, all the logic is here.
@@ -39,7 +39,7 @@ Password - puzzleGame
 - <b> resources/static.styles/ </b> - CSS styles.
 - <b> resources/templates/ </b> - Thymeleaf .html template files. 
 - <b> application.properties </b> - properties used by SpringBoot to auto-configure the application.
- 
+
 Application is structured according to N-Tier structure pattern with Presentation, Service and Data layers.
 
 ## 🤖 Technologies
