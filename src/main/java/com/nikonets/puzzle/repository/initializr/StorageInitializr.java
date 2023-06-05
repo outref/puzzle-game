@@ -1,4 +1,4 @@
-package com.nikonets.puzzle;
+package com.nikonets.puzzle.repository.initializr;
 
 import java.io.File;
 import org.springframework.beans.factory.annotation.Value;

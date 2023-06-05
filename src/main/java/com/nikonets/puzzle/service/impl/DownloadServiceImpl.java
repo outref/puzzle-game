@@ -1,12 +1,15 @@
 package com.nikonets.puzzle.service.impl;
 
+import com.nikonets.puzzle.exception.ZipDownloadException;
 import com.nikonets.puzzle.repository.PuzzleRepository;
 import com.nikonets.puzzle.service.DownloadService;
 import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
@@ -22,8 +25,8 @@ public class DownloadServiceImpl implements DownloadService {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment; filename=download.zip");
         List<String> filesList = puzzleRepository.getPuzzleFilesByImageName(imageName);
-        try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
-            for (String fileName : filesList) {
+        for (String fileName : filesList) {
+            try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
                 FileSystemResource fileSystemResource = new FileSystemResource(fileName);
                 ZipEntry zipEntry = new ZipEntry(fileSystemResource.getFilename());
                 zipEntry.setSize(fileSystemResource.contentLength());
@@ -31,10 +34,10 @@ public class DownloadServiceImpl implements DownloadService {
                 zipOutputStream.putNextEntry(zipEntry);
                 StreamUtils.copy(fileSystemResource.getInputStream(), zipOutputStream);
                 zipOutputStream.closeEntry();
+                zipOutputStream.finish();
+            } catch (IOException e) {
+                throw new ZipDownloadException("Failed to output file in ZipOutputStream: " + fileName, e);
             }
-            zipOutputStream.finish();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }

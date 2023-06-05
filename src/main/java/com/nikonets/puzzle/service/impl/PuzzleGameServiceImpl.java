@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class PuzzleGameServiceImpl implements PuzzleGameService {
+    public static final List<Integer> ROTATION_DEGREES = List.of(0, 90, 180, 270);
     private final PuzzleRepository repository;
 
     @Override
@@ -33,8 +34,8 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
         //Creating tiles list
         List<GameTile> tilesList = new ArrayList<>();
         for (int i = 0; i < tileImagesList.size(); i++) {
-            int randomIndex = new Random().nextInt(GameTile.ROTATION_DEGREES.size());
-            int rotationDegrees = GameTile.ROTATION_DEGREES.get(randomIndex);
+            int randomIndex = new Random().nextInt(ROTATION_DEGREES.size());
+            int rotationDegrees = ROTATION_DEGREES.get(randomIndex);
             tilesList.add(new GameTile(i, initPositions.get(i),
                     rotationDegrees, tileImagesList.get(i)));
         }
@@ -68,11 +69,11 @@ public class PuzzleGameServiceImpl implements PuzzleGameService {
                 .filter(t -> t.getCurrentPos().equals(tilePos))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No such position " + tilePos));
-        int rotationIndex = GameTile.ROTATION_DEGREES.indexOf(gameTile.getRotation());
-        if (rotationIndex == GameTile.ROTATION_DEGREES.size() - 1) {
-            gameTile.setRotation(GameTile.ROTATION_DEGREES.get(0));
+        int rotationIndex = ROTATION_DEGREES.indexOf(gameTile.getRotation());
+        if (rotationIndex == ROTATION_DEGREES.size() - 1) {
+            gameTile.setRotation(ROTATION_DEGREES.get(0));
         } else {
-            gameTile.setRotation(GameTile.ROTATION_DEGREES.get(rotationIndex + 1));
+            gameTile.setRotation(ROTATION_DEGREES.get(rotationIndex + 1));
         }
         List<List<GameTile>> tilesTable = sortAndCreateSquareTable(tilesList);
         gameBoard.setTilesTable(tilesTable);
