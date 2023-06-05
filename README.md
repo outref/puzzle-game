@@ -19,6 +19,7 @@ Password - puzzleGame
 ## 🎯 Features
 - `/`   [Home] : display all uploaded pictures (puzzles) with links to play with them or download the Zip file with all puzzle-pieces in .jpg format.
 - `/upload`  [Upload] : upload your JPG image and select how it will be sliced into puzzle tiles.
+- `/game` [Game] : swap and rotate tiles on the table, check the solution correctness and display reference image
 - `/solver`  [Puzzle Solver] : upload your puzzle-pieces (rectangular JPG images that are part of one sliced image). Puzzle tiles can be of any size, aspekt-ratio and not necessarily all equal (the only conditins are - JPG format, uprigth position, 5MB combined size). Algorithm works very well with quantities of up to 100 tiles, but can partially fail with bigger amounts.
 
 ## 📖 Structure
@@ -37,7 +38,7 @@ Password - puzzleGame
 - <b> WebSecurityConfig </b> - @Configuration class with security-config beans.
 - <b> resources/static.styles/ </b> - CSS styles.
 - <b> resources/templates/ </b> - Thymeleaf .html template files. 
-- <b> application.properties </b> - propergies used by SpringBoot to auto-configure the application.
+- <b> application.properties </b> - properties used by SpringBoot to auto-configure the application.
  
 Application is structured according to N-Tier structure pattern with Presentation, Service and Data layers.
 
