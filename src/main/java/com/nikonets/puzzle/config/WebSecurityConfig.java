@@ -1,4 +1,4 @@
-package com.nikonets.puzzle;
+package com.nikonets.puzzle.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 

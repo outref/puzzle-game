@@ -25,6 +25,9 @@ public class PuzzleRepositoryImpl implements PuzzleRepository {
     public String savePuzzle(String imageName,
                              BufferedImage originalImg,
                              BufferedImage[] tileImages) {
+        //remove special characters from name
+        imageName = imageName.replaceAll("[^A-Za-z0-9]","");
+
         String dirPath = imagesDir + imageName;
         File tilesDir = new File(dirPath);
         tilesDir.mkdirs();
