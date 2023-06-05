@@ -28,10 +28,10 @@ Password - puzzleGame
 - <b> controller/ </b> - all the <b>@Controller</b>s serving the application's endpoints.
 - <b> dto/ </b> - package for <b>DTO</b> classes.
 - <b> exception/ </b> - holds all custom exception classes.
-- <b> model/ </b> - model classes, main entities used in application: 
--- <b> GameBoard </b> encapsulates the information about all tiles on the board with other game-related information  
--- <b> GameTile </b> keeps track of tile's image, position and rotation during the game.  
--- <b> SolverTile </b> holds all the information about each tile that puzzle-solving algorithm needs to assemble the solution.
+- <b> model/ </b> - model classes, main entities used in application:  
+  - <b> GameBoard </b> encapsulates the information about all tiles on the board with other game-related information  
+  - <b> GameTile </b> keeps track of tile's image, position and rotation during the game.  
+  - <b> SolverTile </b> holds all the information about each tile that puzzle-solving algorithm needs to assemble the solution.
 - <b> repository/ </b> - contains interface responsible for saving images as files + StorageInitializr bean that is responsible for creating a folder for keeping images on application startup.
 - <b> service/ </b> - service layer of the application, all the logic is here.
 - <b> PuzzleApplication </b> - @SpringBootApplication class.
