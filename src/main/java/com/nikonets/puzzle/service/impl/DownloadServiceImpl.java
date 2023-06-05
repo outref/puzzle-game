@@ -23,9 +23,8 @@ public class DownloadServiceImpl implements DownloadService {
         response.setContentType("application/zip");
         response.setHeader("Content-Disposition", "attachment; filename=download.zip");
         List<String> filesList = puzzleRepository.getPuzzleFilesByImageName(imageName);
-        for (String fileName : filesList) {
-            try (ZipOutputStream zipOutputStream =
-                         new ZipOutputStream(response.getOutputStream())) {
+        try (ZipOutputStream zipOutputStream = new ZipOutputStream(response.getOutputStream())) {
+            for (String fileName : filesList) {
                 FileSystemResource fileSystemResource = new FileSystemResource(fileName);
                 ZipEntry zipEntry = new ZipEntry(fileSystemResource.getFilename());
                 zipEntry.setSize(fileSystemResource.contentLength());
@@ -33,11 +32,10 @@ public class DownloadServiceImpl implements DownloadService {
                 zipOutputStream.putNextEntry(zipEntry);
                 StreamUtils.copy(fileSystemResource.getInputStream(), zipOutputStream);
                 zipOutputStream.closeEntry();
-                zipOutputStream.finish();
-            } catch (IOException e) {
-                throw new ZipDownloadException("Failed to output file in ZipOutputStream: "
-                        + fileName, e);
             }
+            zipOutputStream.finish();
+        } catch (IOException e) {
+            throw new ZipDownloadException("Failed to output file in ZipOutputStream", e);
         }
     }
 }
