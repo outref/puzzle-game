@@ -54,5 +54,5 @@ Application is structured according to N-Tier structure pattern with Presentatio
 2.  Navigate to the project directory using `cd <path to directory>/puzzle-game`.
 3.  Ensure that you have Java 17 installed on your system.
 4. Build the application using `mvn clean install`.
-5.  Start the application with `java -jar target/puzzle-0.0.1-SNAPSHOT.jar` command. Application will create the folder for keeping images next to the .jar file.
+5.  Start the application with `java -jar target/puzzle-game.jar` command. Application will create the folder for keeping images next to the .jar file.
 6.  Go to `http://localhost:8090/` and use provided credentials to login.
