@@ -32,6 +32,7 @@ Password - puzzleGame
   - <b> GameBoard </b> encapsulates the information about all tiles on the board with other game-related information  
   - <b> GameTile </b> keeps track of tile's image, position and rotation during the game.  
   - <b> SolverTile </b> holds all the information about each tile that puzzle-solving algorithm needs to assemble the solution.
+  - <b> TileEdge </b> represents the line of pixels on the edge of the tile.
 - <b> repository/ </b> - contains interface responsible for saving images as files + StorageInitializr bean that is responsible for creating a folder for keeping images on application startup.
 - <b> service/ </b> - service layer of the application, all the logic is here.
 - <b> PuzzleApplication </b> - @SpringBootApplication class.
