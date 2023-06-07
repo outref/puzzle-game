@@ -1,5 +1,6 @@
 package com.nikonets.puzzle.repository.impl;
 
+import com.nikonets.puzzle.exception.PuzzleRepositoryException;
 import com.nikonets.puzzle.repository.PuzzleRepository;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -28,6 +29,10 @@ public class PuzzleRepositoryImpl implements PuzzleRepository {
         //remove special characters from name
         imageName = imageName.replaceAll("[^A-Za-z0-9]","");
 
+        if (getAllPuzzles().contains(imageName)) {
+            throw new PuzzleRepositoryException("Puzzle with this name is already saved!");
+        }
+
         String dirPath = imagesDir + imageName;
         File tilesDir = new File(dirPath);
         tilesDir.mkdirs();
@@ -37,7 +42,8 @@ public class PuzzleRepositoryImpl implements PuzzleRepository {
         try {
             ImageIO.write(originalImg, IMG_FORMAT, originalImgFile);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to write original image file to repository!", e);
+            throw new PuzzleRepositoryException("Failed to write original"
+                    + " image file to repository!", e);
         }
 
         //writing sub-images into image files
@@ -46,7 +52,8 @@ public class PuzzleRepositoryImpl implements PuzzleRepository {
             try {
                 ImageIO.write(tileImages[i], IMG_FORMAT, outputFile);
             } catch (IOException e) {
-                throw new RuntimeException("Failed to write tile image file to repository!", e);
+                throw new PuzzleRepositoryException("Failed to write tile "
+                        + "image file to repository!", e);
             }
         }
         return "/" + dirPath + "/" + ORIGINAL_IMG_NAME;
@@ -81,7 +88,7 @@ public class PuzzleRepositoryImpl implements PuzzleRepository {
         try {
             ImageIO.write(solution, IMG_FORMAT, outputFile);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save solution image", e);
+            throw new PuzzleRepositoryException("Failed to save solution image", e);
         }
         return path;
     }
